@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="Cliente")
+ * @ORM\Table(name="cliente")
  */
 class Cliente
 {
@@ -52,13 +52,15 @@ class Cliente
       $this->email = $email;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getId(){return $this->id;}
 
     public function getNombre(){return $this->nombre;}
     public function getApellido(){return $this->apellido;}
     public function getDni(){return $this->dni;}
     public function getEmail(){return $this->email;}
+
+    public function setNombre($data)   {$this->nombre = $data;}
+    public function setApellido($data) {$this->apellido = $data;}
+    public function setDni($data)      {$this->dni = $data;}
+    public function setEmail($data)    {$this->email = $data;}
 }
