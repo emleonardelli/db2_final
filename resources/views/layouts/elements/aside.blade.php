@@ -10,6 +10,9 @@
             <li><a href="/clientes">Clientes</a></li>
         </ul>
         <ul>
+            <li><a href="/categorias">Categorias</a></li>
+        </ul>
+        <ul>
             <li><a href="/productos">Productos</a></li>
         </ul>
       </li>

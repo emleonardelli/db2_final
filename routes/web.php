@@ -17,6 +17,10 @@ Route::get('/clientes', 'ClienteController@index')->name('clientes');
 Route::post('/clientes', 'ClienteController@save');
 Route::delete('/clientes', 'ClienteController@remove');
 
+Route::get('/categorias', 'CategoriaController@index')->name('categorias');
+Route::post('/categorias', 'CategoriaController@save');
+Route::delete('/categorias', 'CategoriaController@remove');
+
 Route::get('/productos', 'ProductoController@index')->name('productos');
 Route::post('/productos', 'ProductoController@save');
 Route::delete('/productos', 'ProductoController@remove');
