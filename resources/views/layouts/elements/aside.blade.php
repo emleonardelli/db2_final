@@ -5,10 +5,13 @@
   <ul class="menu-list">
       <li><a href="/">Inicio</a></li>
       <li>
-          <a>CRUDs</a>
-          <ul>
-              <li><a href="/clientes">Clientes</a></li>
-          </ul>
+        <a>CRUDs</a>
+        <ul>
+            <li><a href="/clientes">Clientes</a></li>
+        </ul>
+        <ul>
+            <li><a href="/productos">Productos</a></li>
+        </ul>
       </li>
   </ul>
 </aside>

@@ -13,9 +13,10 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/crearcliente', 'ClienteController@crearcliente');
-
 Route::get('/clientes', 'ClienteController@index')->name('clientes');
 Route::post('/clientes', 'ClienteController@save');
 Route::delete('/clientes', 'ClienteController@remove');
 
+Route::get('/productos', 'ProductoController@index')->name('productos');
+Route::post('/productos', 'ProductoController@save');
+Route::delete('/productos', 'ProductoController@remove');

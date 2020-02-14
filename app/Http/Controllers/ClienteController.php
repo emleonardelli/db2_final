@@ -9,12 +9,6 @@ use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class ClienteController extends Controller
 {
-    function crearcliente(){
-        $eze=new Cliente('Ezequiel', 'Mella', '12341234', 'email@gmail.com');
-        EntityManager::persist($eze);
-        EntityManager::flush();
-    }
-
     function index(Request $r){
         $clientes=EntityManager::getRepository(Cliente::class);
 
