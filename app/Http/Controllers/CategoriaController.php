@@ -38,8 +38,13 @@ class CategoriaController extends Controller
     function remove(Request $r){
         $categorias=EntityManager::getRepository(Categoria::class);
         $categoria=$categorias->find($r->id);
-        EntityManager::remove($categoria);
-        EntityManager::flush();
+        
+        try {
+            EntityManager::remove($categoria);
+            EntityManager::flush();
+        } catch (\Throwable $th) {
+            return Redirect::back()->withErrors(['La cagegoria tiene productos asignados']);
+        }
         return Redirect::route('categorias');
     }
 }

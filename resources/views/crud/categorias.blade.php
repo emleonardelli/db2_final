@@ -59,7 +59,12 @@
 		</div>
 	</form>
 </div>
-
+@if($errors->any())
+<div class="notification is-danger">
+  <button class="delete"></button>
+  La categoria seleccionada tiene productos asignados, no puede ser elimnada!
+</div>
+@endif
 <div class="column is-full has-text-left">
 	<table class="table is-fullwidth">
 		<thead>
