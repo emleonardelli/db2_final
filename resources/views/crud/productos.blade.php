@@ -95,7 +95,7 @@
 					<td>{{ $var->getId() }}</td>
 					<td>{{ $var->getDescripcion() }}</td>
 					<td>{{ $var->getCategoria()->getNombre() }}</td>
-					<td>{{ $var->getPrecio() }}</td>
+					<td>$ {{ number_format($var->getPrecio(), 2, ',', '.') }}</td>
 					<td >
 						<a class="button is-warning is-pulled-left	"
 							href="/productos?id={{ $var->getId() }}">

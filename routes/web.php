@@ -28,3 +28,6 @@ Route::delete('/categorias', 'CategoriaController@remove');
 Route::get('/productos', 'ProductoController@index')->name('productos');
 Route::post('/productos', 'ProductoController@save');
 Route::delete('/productos', 'ProductoController@remove');
+
+Route::get('/carrito', 'SaleController@carrito')->name('carrito');
+Route::get('/carrito/guardar', 'SaleController@saveCarrito');
