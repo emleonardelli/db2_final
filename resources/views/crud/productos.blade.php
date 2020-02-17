@@ -57,6 +57,24 @@
 				</div>
 				<div class="field">
 					<p class="control is-expanded has-icons-left">
+						<select class="input" 
+							name="marca" 
+							required>
+							<option value="">Seleccione una marca</option>
+							@foreach ($marcas as $var)
+							<option value="{{ $var->getId() }}" 
+								{{ isset($get)? $var->getId() == $get->getMarca()->getId() ? 'selected' : '' : ''}}>
+								{{ $var->getNombre() }}
+							</option>
+							@endforeach
+						</select>
+						<span class="icon is-small is-left">
+							<i class="fas fa-user"></i>
+						</span>
+					</p>
+				</div>
+				<div class="field">
+					<p class="control is-expanded has-icons-left">
 						<input class="input" 
 							name="precio" 
 							type="number" 
@@ -77,7 +95,11 @@
 		</div>
 	</form>
 </div>
-
+@if($errors->any())
+<div class="notification is-danger">
+  El producto esta siendo utilizado por algun carrito de compras
+</div>
+@endif
 <div class="column is-full has-text-left">
 	<table class="table is-fullwidth">
 		<thead>

@@ -40,8 +40,13 @@ class ClienteController extends Controller
     function remove(Request $r){
         $clientes=EntityManager::getRepository(Cliente::class);
         $cliente=$clientes->find($r->id);
-        EntityManager::remove($cliente);
-        EntityManager::flush();
+
+        try {
+            EntityManager::remove($cliente);
+            EntityManager::flush();
+        } catch (\Throwable $th) {
+            return Redirect::back()->withErrors(['El cliente tiene tarjetas asociadas']);
+        }
         return Redirect::route('clientes');
     }
 }

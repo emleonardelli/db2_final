@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('title')Carritos @endsection
+
 @section('content')
 <section class="hero is-info welcome is-small">
     <div class="hero-body">
@@ -26,9 +28,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ($list as $var)
+            @foreach ($list as $var)
+                @if (!$var->getPagado())
+                    
 				<tr>
-					<td>{{ $var->getId() }}</td>
+                    <td>{{ $var->getId() }}</td>
 					<td>{{ $var->getCliente()->getNombre() }}</td>
 					<td>{{ count($var->getProductos()) }}</td>
 					<td>
@@ -37,13 +41,21 @@
                             foreach ($var->getProductos() as $var2) {
                                 $precio+=$var2->getPrecio()*1;
                             }    
-                        @endphp
-                        $ {{ number_format($precio, 2, ',', '.') }}</td>
-					<td >
-                        <a href="/carrito/pagar?id={{ $var->getId() }}"
-                            class="button is-success">Pagar</a>
-					</td>
-				</tr>
+                            @endphp
+                        $ {{ number_format($precio, 2, ',', '.') }}
+                    </td>
+                    <td >
+                        <a href="/venta/pagar/{{ $var->getId() }}"
+                            class="button is-success">
+                            <i class="fas fa-cart-plus"></i>
+                        </a>
+                        <a href="/carrito/borrar?id={{ $var->getId() }}"
+                            class="button is-danger">
+                            <i class="fas fa-cart-arrow-down"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endif
 			@endforeach
 		</tbody>
 	</table>

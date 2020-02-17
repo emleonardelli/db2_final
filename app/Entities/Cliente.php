@@ -3,7 +3,8 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * @ORM\Entity
  * @ORM\Table(name="cliente")

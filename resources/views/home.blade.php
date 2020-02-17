@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<section class="hero is-info welcome is-small">
+<section class="hero is-medium  is-info welcome is-small">
   <div class="hero-body">
       <div class="container">
           <h1 class="title">

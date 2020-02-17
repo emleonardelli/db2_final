@@ -1,27 +1,27 @@
 @extends('layouts.app')
-@section('title')CRUD - Clientes @endsection
+@section('title')CRUD - Marcas @endsection
 
 @section('content')
-<section class="hero is-primary welcome is-small">
+<section class="hero is-success welcome is-small">
   <div class="hero-body">
       <div class="container">
           <h1 class="title">
-              Clientes!
+              Marcas!
           </h1>
           <h2 class="subtitle">
-              Alta, Baja y Modificacion de Clientes
+              Alta, Baja y Modificacion de Marcas
           </h2>
       </div>
   </div>
 </section>
 
 <div class="column is-full has-text-left">
-	<form action="/clientes" method="post">
+	<form action="/marcas" method="post">
 		{{ csrf_field() }}
 		@if (isset($get))
 			<input type="hidden" name="id" value="{{ $get->getId() }}">
 		@endif
-		<label class="label">Crear cliente</label>	
+		<label class="label">Crear categoria</label>	
 		<div class="field is-horizontal">
 			<div class="field-body">
 				<div class="field">
@@ -40,43 +40,13 @@
 				<div class="field">
 					<p class="control is-expanded has-icons-left">
 						<input class="input" 
-							name="apellido" 
+							name="descripcion" 
 							type="text"
-							placeholder="Apellido"
+							placeholder="Descripcion"
 							required
-							value="{{ isset($get) ? $get->getApellido() : '' }}">
+							value="{{ isset($get) ? $get->getDescripcion() : '' }}">
 						<span class="icon is-small is-left">
 							<i class="fas fa-user"></i>
-						</span>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="field is-horizontal">
-			<div class="field-body">
-				<div class="field">
-					<p class="control is-expanded has-icons-left">
-						<input class="input" 
-							name="dni" 
-							type="number" 
-							placeholder="Dni"
-							required
-							value="{{ isset($get) ? $get->getDni() : '' }}">
-						<span class="icon is-small is-left">
-							<i class="fas fa-file"></i>
-						</span>
-					</p>
-				</div>
-				<div class="field">
-					<p class="control is-expanded has-icons-left">
-						<input class="input" 
-							name="email" 
-							type="text" 
-							placeholder="Email"
-							required
-							value="{{ isset($get) ? $get->getEmail() : '' }}">
-						<span class="icon is-small is-left">
-							<i class="fas fa-envelope"></i>
 						</span>
 					</p>
 				</div>
@@ -92,7 +62,7 @@
 @if($errors->any())
 <div class="notification is-danger">
   <button class="delete"></button>
-  El cliente seleccionado tiene tarjetas asociadas!
+  La marca seleccionada tiene productos asignados, no puede ser elimnada!
 </div>
 @endif
 <div class="column is-full has-text-left">
@@ -101,8 +71,7 @@
 			<tr>
 				<th>#</th>
 				<th>Nombre</th>
-				<th>DNI</th>
-				<th>Email</th>
+				<th>Descripcion</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
@@ -110,19 +79,14 @@
 			@foreach ($list as $var)
 				<tr>
 					<td>{{ $var->getId() }}</td>
-					<td>{{ $var->getNombre() }} {{ $var->getApellido() }}</td>
-					<td>{{ $var->getDni() }}</td>
-					<td>{{ $var->getEmail() }}</td>
+					<td>{{ $var->getNombre() }}</td>
+					<td>{{ $var->getDescripcion() }}</td>
 					<td >
-						<a class="button is-success is-pulled-left	"
-							href="/clientes/tarjetas?cliente_id={{ $var->getId() }}">
-							<i class="fas fa-id-card"></i>
-						</a>
 						<a class="button is-warning is-pulled-left	"
-							href="/clientes?id={{ $var->getId() }}">
+							href="/marcas?id={{ $var->getId() }}">
 							<i class="fas fa-user-edit"></i>
 						</a>
-						<form action="/clientes" method="post" class="is-pulled-left	">
+						<form action="/marcas" method="post" class="is-pulled-left	">
 							{{ csrf_field() }}
 							<input type="hidden" name="_method" value="delete" />
 							<input type="hidden" name="id" value="{{ $var->getId() }}">
