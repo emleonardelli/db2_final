@@ -92,7 +92,9 @@
 @if($errors->any())
 <div class="notification is-danger">
   <button class="delete"></button>
-  El cliente seleccionado tiene tarjetas asociadas!
+  @foreach ($errors->all() as $message) 
+    {{ $message }}
+	@endforeach
 </div>
 @endif
 <div class="column is-full has-text-left">

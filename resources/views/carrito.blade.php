@@ -64,7 +64,7 @@
 <br>
 <div class="columns">
     <div class="column is-6">
-        <div class="card events-card">
+        <div class="card">
             <header class="card-header">
                 <p class="card-header-title">
                     Clientes&nbsp;<small>(seleccione uno)</small>
@@ -96,7 +96,7 @@
     </div>
 
     <div class="column is-6">
-        <div class="card events-card">
+        <div class="card">
             <header class="card-header">
                 <p class="card-header-title">
                     Productos&nbsp;<small>(seleccione uno o varios)</small>

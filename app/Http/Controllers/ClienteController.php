@@ -3,49 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Entities\Cliente;
 use Illuminate\Support\Facades\Redirect;
-use LaravelDoctrine\ORM\Facades\EntityManager;
+use App\Services\Doctrine\ClienteDoctrine;
+use Exception;
 
 class ClienteController extends Controller
 {
     function index(Request $r){
-        $clientes=EntityManager::getRepository(Cliente::class);
-
+        $cs=new ClienteDoctrine();
         return view('crud.clientes',[
-            'list' => $clientes->findAll(),
-            'get' => $r->id ? $clientes->find($r->id) : null
+            'list' => $cs->listarClientes(),
+            'get' => $r->id ? $cs->obtenerCliente($r->id) : null
         ]);
     }
 
     function save(Request $r){
-        $cliente=null;
-        if ($r->id) { 
-            $clientes=EntityManager::getRepository(Cliente::class);
-            $cliente=$clientes->find($r->id);
-            $cliente->setNombre($r->nombre);
-            $cliente->setApellido($r->apellido);
-            $cliente->setDni($r->dni);
-            $cliente->setEmail($r->email);
-            EntityManager::persist($cliente);
-            EntityManager::flush();
-        }else{
-            $cliente=new Cliente($r->nombre, $r->apellido, $r->dni, $r->email);
-            EntityManager::persist($cliente);
-            EntityManager::flush();
+        $cs=new ClienteDoctrine();
+        try {
+            if ($r->id) { 
+                $cs->modificarCliente($r->id, $r->nombre,$r->apellido,$r->dni,$r->email);
+            }else{
+                $cs->crearCliente($r->nombre,$r->apellido,$r->dni,$r->email);
+            }
+        } catch (Exception $e) {
+            return Redirect::back()->withErrors([$e->getMessage()]);
         }
         return Redirect::route('clientes');
     }
 
     function remove(Request $r){
-        $clientes=EntityManager::getRepository(Cliente::class);
-        $cliente=$clientes->find($r->id);
-
+        $cs=new ClienteDoctrine();
         try {
-            EntityManager::remove($cliente);
-            EntityManager::flush();
-        } catch (\Throwable $th) {
-            return Redirect::back()->withErrors(['El cliente tiene tarjetas asociadas']);
+            $cs->borrarCliente($r->id);
+        } catch (Exception $e) {
+            return Redirect::back()->withErrors([$e->getMessage()]);
         }
         return Redirect::route('clientes');
     }

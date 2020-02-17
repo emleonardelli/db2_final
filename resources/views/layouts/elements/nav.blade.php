@@ -14,7 +14,7 @@
   </div>
 </nav>
 <!-- END NAV -->
-<div id="navMenu" class="navbar-menu">
+<div id="navMenu" class="navbar-menu is-hidden-widescreen-only is-hidden-desktop-only">
   <div class="navbar-start">
     <a class="navbar-item" href="/">Inicio</a>
     <a class="navbar-item" href="/categorias">Categorias</a>
