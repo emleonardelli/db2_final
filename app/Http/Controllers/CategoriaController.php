@@ -9,28 +9,31 @@ use Illuminate\Support\Facades\Redirect;
 
 class CategoriaController extends Controller
 {
+    protected $ps;
+
+    public function __construct(){
+        $this->ps=new ProductoDoctrine();
+    }
+
     function index(Request $r){
-        $ps=new ProductoDoctrine();
         return view('crud.categorias',[
-            'list' => $ps->listarCategorias(),
-            'get' => $r->id ? $ps->obtenerCategoria($r->id) : null
+            'list' => $this->ps->listarCategorias(),
+            'get' => $r->id ? $this->ps->obtenerCategoria($r->id) : null
         ]);
     }
 
     function save(Request $r){
-        $ps=new ProductoDoctrine();
         if ($r->id) { 
-            $ps->modificarCategoria($r->id, $r->nombre, $r->descripcion);
+            $this->ps->modificarCategoria($r->id, $r->nombre, $r->descripcion);
         }else{
-            $ps->crearCategoria($r->nombre, $r->descripcion);
+            $this->ps->crearCategoria($r->nombre, $r->descripcion);
         }
         return Redirect::route('categorias');
     }
 
-    function remove(Request $r){        
-        $ps=new ProductoDoctrine();
+    function remove(Request $r){
         try {
-            $ps->borrarCategoria($r->id);
+            $this->ps->borrarCategoria($r->id);
         } catch (Exception $e) {
             return Redirect::back()->withErrors([$e->getMessage()]);
         }

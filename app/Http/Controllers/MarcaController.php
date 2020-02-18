@@ -11,28 +11,31 @@ use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class MarcaController extends Controller
 {
+    protected $ps;
+
+    public function __construct(){
+        $this->ps=new ProductoDoctrine(); 
+    }
+
     function index(Request $r){
-        $ps=new ProductoDoctrine();
         return view('crud.marcas',[
-            'list' => $ps->listarMarcas(),
-            'get' => $r->id ? $ps->obtenerMarca($r->id) : null
+            'list' => $this->ps->listarMarcas(),
+            'get' => $r->id ? $this->ps->obtenerMarca($r->id) : null
         ]);
     }
 
     function save(Request $r){
-        $ps=new ProductoDoctrine();
         if ($r->id) { 
-            $ps->modificarMarca($r->id, $r->nombre, $r->descripcion);
+            $this->ps->modificarMarca($r->id, $r->nombre, $r->descripcion);
         }else{
-            $ps->crearMarca($r->nombre, $r->descripcion);
+            $this->ps->crearMarca($r->nombre, $r->descripcion);
         }
         return Redirect::route('marcas');
     }
 
     function remove(Request $r){
-        $ps=new ProductoDoctrine();
         try {
-            $ps->borrarMarca($r->id);
+            $this->ps->borrarMarca($r->id);
         } catch (Exception $e) {
             return Redirect::back()->withErrors([$e->getMessage()]);
         }
