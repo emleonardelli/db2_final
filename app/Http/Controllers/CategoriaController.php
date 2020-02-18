@@ -3,47 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Entities\Categoria;
+use App\Services\Doctrine\ProductoDoctrine;
+use Exception;
 use Illuminate\Support\Facades\Redirect;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class CategoriaController extends Controller
 {
     function index(Request $r){
-        $categorias=EntityManager::getRepository(Categoria::class);
-
+        $ps=new ProductoDoctrine();
         return view('crud.categorias',[
-            'list' => $categorias->findAll(),
-            'get' => $r->id ? $categorias->find($r->id) : null
+            'list' => $ps->listarCategorias(),
+            'get' => $r->id ? $ps->obtenerCategoria($r->id) : null
         ]);
     }
 
     function save(Request $r){
-        $categoria=null;
+        $ps=new ProductoDoctrine();
         if ($r->id) { 
-            $categorias=EntityManager::getRepository(Categoria::class);
-            $categoria=$categorias->find($r->id);
-            $categoria->setNombre($r->nombre);
-            $categoria->setDescripcion($r->descripcion);
-            EntityManager::persist($categoria);
-            EntityManager::flush();
+            $ps->modificarCategoria($r->id, $r->nombre, $r->descripcion);
         }else{
-            $categoria=new Categoria($r->nombre, $r->descripcion);
-            EntityManager::persist($categoria);
-            EntityManager::flush();
+            $ps->crearCategoria($r->nombre, $r->descripcion);
         }
         return Redirect::route('categorias');
     }
 
-    function remove(Request $r){
-        $categorias=EntityManager::getRepository(Categoria::class);
-        $categoria=$categorias->find($r->id);
-        
+    function remove(Request $r){        
+        $ps=new ProductoDoctrine();
         try {
-            EntityManager::remove($categoria);
-            EntityManager::flush();
-        } catch (\Throwable $th) {
-            return Redirect::back()->withErrors(['La cagegoria tiene productos asignados']);
+            $ps->borrarCategoria($r->id);
+        } catch (Exception $e) {
+            return Redirect::back()->withErrors([$e->getMessage()]);
         }
         return Redirect::route('categorias');
     }

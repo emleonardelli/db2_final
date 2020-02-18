@@ -3,6 +3,7 @@ namespace App\Services\Doctrine;
 
 use App\Api\ClienteService;
 use App\Entities\Cliente;
+use App\Entities\Tarjeta;
 use Exception;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
@@ -54,5 +55,38 @@ class ClienteDoctrine implements ClienteService {
 
   public function obtenerCliente($cliente_id){
     return EntityManager::getRepository(Cliente::class)->find($cliente_id);
+  }
+
+  public function listarTarjetas($cliente_id){
+    $tarjetas=EntityManager::getRepository(Tarjeta::class);
+    return $tarjetas->findBy(['cliente' => $cliente_id]) 
+            ? $tarjetas->findBy(['cliente' => $cliente_id]) 
+            : [];
+  }
+
+  public function obtenerTarjeta($tarjeta_id){
+    return EntityManager::getRepository(Tarjeta::class)->find($tarjeta_id);
+  }
+
+  public function crearTarjeta($nombre, $numero, $disponible, $cliente){
+    $tarjeta=new Tarjeta($nombre, $numero, $disponible, $cliente);
+    EntityManager::persist($tarjeta);
+    EntityManager::flush();
+    return true;
+  }
+  public function modificarTarjeta($tarjeta_id, $nombre, $numero, $disponible){
+    $tarjeta=EntityManager::getRepository(Tarjeta::class)->find($tarjeta_id);
+    $tarjeta->setNombre($nombre);
+    $tarjeta->setNumero($numero);
+    $tarjeta->setDisponible($disponible);
+    EntityManager::persist($tarjeta);
+    EntityManager::flush();
+    return true;
+  }
+  public function borrarTarjeta($tarjeta_id){
+    $tarjeta=EntityManager::getRepository(Tarjeta::class)->find($tarjeta_id);
+    EntityManager::remove($tarjeta);
+    EntityManager::flush();
+    return true;
   }
 }  

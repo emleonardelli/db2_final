@@ -3,49 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Entities\Cliente;
-use App\Entities\Tarjeta;
+use App\Services\Doctrine\ClienteDoctrine;
 use Illuminate\Support\Facades\Redirect;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class TarjetaController extends Controller
 {
     function index(Request $r){
-        $tarjetas=EntityManager::getRepository(Tarjeta::class);
+        $cs=new ClienteDoctrine();
         return view('crud.tarjetas',[
             'cliente_id' => $r->cliente_id,
-            'list' => $tarjetas->findBy(['cliente' => $r->cliente_id]) 
-                    ? $tarjetas->findBy(['cliente' => $r->cliente_id]) 
-                    : [],
-            'get' => $r->tarjeta_id ? $tarjetas->find($r->tarjeta_id) : null
+            'list' => $cs->listarTarjetas($r->cliente_id),
+            'get' => $r->tarjeta_id ? $cs->obtenerTarjeta($r->tarjeta_id) : null
         ]);
     }
 
     function save(Request $r){
-        $tarjeta=null;
-        $clientes=EntityManager::getRepository(Cliente::class);
-        $cliente=$clientes->find($r->cliente_id);
+        $cs=new ClienteDoctrine();
+        $cliente=$cs->obtenerCliente($r->cliente_id);
         if ($r->id) { 
-            $tarjetas=EntityManager::getRepository(Tarjeta::class);
-            $tarjeta=$tarjetas->find($r->id);
-            $tarjeta->setNombre($r->nombre);
-            $tarjeta->setNumero($r->numero);
-            $tarjeta->setDisponible($r->disponible);
-            EntityManager::persist($tarjeta);
-            EntityManager::flush();
+            $cs->modificarTarjeta($r->id, $r->nombre, $r->numero, $r->disponible);
         }else{
-            $tarjeta=new Tarjeta($r->nombre, $r->numero, $r->disponible, $cliente);
-            EntityManager::persist($tarjeta);
-            EntityManager::flush();
+            $cs->crearTarjeta($r->nombre, $r->numero, $r->disponible, $cliente);
         }
         return Redirect::route('clientes');
     }
 
     function remove(Request $r){
-        $tarjetas=EntityManager::getRepository(Tarjeta::class);
-        $tarjeta=$tarjetas->find($r->id);
-        EntityManager::remove($tarjeta);
-        EntityManager::flush();
+        $cs=new ClienteDoctrine();
+        $cs->borrarTarjeta($r->id);
         return Redirect::route('clientes');
     }
 }

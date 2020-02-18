@@ -62,7 +62,9 @@
 @if($errors->any())
 <div class="notification is-danger">
   <button class="delete"></button>
-  La categoria seleccionada tiene productos asignados, no puede ser elimnada!
+  @foreach ($errors->all() as $message) 
+    {{ $message }}
+	@endforeach
 </div>
 @endif
 <div class="column is-full has-text-left">

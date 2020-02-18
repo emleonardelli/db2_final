@@ -4,46 +4,37 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Marca;
+use App\Services\Doctrine\ProductoDoctrine;
+use Exception;
 use Illuminate\Support\Facades\Redirect;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class MarcaController extends Controller
 {
     function index(Request $r){
-        $marcas=EntityManager::getRepository(Marca::class);
-
+        $ps=new ProductoDoctrine();
         return view('crud.marcas',[
-            'list' => $marcas->findAll(),
-            'get' => $r->id ? $marcas->find($r->id) : null
+            'list' => $ps->listarMarcas(),
+            'get' => $r->id ? $ps->obtenerMarca($r->id) : null
         ]);
     }
 
     function save(Request $r){
-        $marca=null;
+        $ps=new ProductoDoctrine();
         if ($r->id) { 
-            $marcas=EntityManager::getRepository(Marca::class);
-            $marca=$marcas->find($r->id);
-            $marca->setNombre($r->nombre);
-            $marca->setDescripcion($r->descripcion);
-            EntityManager::persist($marca);
-            EntityManager::flush();
+            $ps->modificarMarca($r->id, $r->nombre, $r->descripcion);
         }else{
-            $marca=new Marca($r->nombre, $r->descripcion);
-            EntityManager::persist($marca);
-            EntityManager::flush();
+            $ps->crearMarca($r->nombre, $r->descripcion);
         }
         return Redirect::route('marcas');
     }
 
     function remove(Request $r){
-        $marcas=EntityManager::getRepository(Marca::class);
-        $marca=$marcas->find($r->id);
-        
+        $ps=new ProductoDoctrine();
         try {
-            EntityManager::remove($marca);
-            EntityManager::flush();
-        } catch (\Throwable $th) {
-            return Redirect::back()->withErrors(['La marca tiene productos asignados']);
+            $ps->borrarMarca($r->id);
+        } catch (Exception $e) {
+            return Redirect::back()->withErrors([$e->getMessage()]);
         }
         return Redirect::route('marcas');
     }

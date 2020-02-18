@@ -6,49 +6,40 @@ use Illuminate\Http\Request;
 use App\Entities\Producto;
 use App\Entities\Categoria;
 use App\Entities\Marca;
+use App\Services\Doctrine\ProductoDoctrine;
+use Exception;
 use Illuminate\Support\Facades\Redirect;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class ProductoController extends Controller
 {
     function index(Request $r){
-        $productos=EntityManager::getRepository(Producto::class);
-        $categorias=EntityManager::getRepository(Categoria::class);
-        $marcas=EntityManager::getRepository(Marca::class);
+        $ps=new ProductoDoctrine();
         return view('crud.productos',[
-            'list' => $productos->findAll(),
-            'get' => $r->id ? $productos->find($r->id) : null,
-            'categorias' => $categorias->findAll(),
-            'marcas' => $marcas->findAll(),
+            'list' => $ps->listarProductos(),
+            'get' => $r->id ? $ps->obtenerProducto($r->id) : null,
+            'categorias' => $ps->listarCategorias(),
+            'marcas' => $ps->listarMarcas(),
         ]);
     }
 
     function save(Request $r){
-        $producto=null;
-        $categoria=EntityManager::getRepository(Categoria::class)->find($r->categoria);
-        $marca=EntityManager::getRepository(Marca::class)->find($r->marca);
+        $ps=new ProductoDoctrine();
+        $categoria=$ps->obtenerCategoria($r->categoria);
+        $marca=$ps->obtenerMarca($r->marca);
         if ($r->id) { 
-            $productos=EntityManager::getRepository(Producto::class);
-            $producto=$productos->find($r->id);
-            $producto->setDescripcion($r->descripcion);
-            $producto->setPrecio($r->precio);
-            $producto->setCategoria($categoria);
-            $producto->setMarca($marca);
+            $ps->modificarProducto($r->id, $r->descripcion, $r->precio, $categoria, $marca);
         }else{
-            $producto=new Producto($r->descripcion, $r->precio, $categoria, $marca);
+            $ps->crearProducto($r->descripcion, $r->precio, $categoria, $marca);
         }
-        EntityManager::persist($producto);
-        EntityManager::flush();
         return Redirect::route('productos');
     }
 
     function remove(Request $r){
-        $productos=EntityManager::getRepository(Producto::class);
-        $producto=$productos->find($r->id);
+        $ps=new ProductoDoctrine();
         try {
-            EntityManager::remove($producto);
-            EntityManager::flush();
-        } catch (\Throwable $th) {
+            $ps->borrarProducto($r->id);
+        } catch (Exception $e) {
             return Redirect::back()->withErrors(['Error']);
         }
         return Redirect::route('productos');
