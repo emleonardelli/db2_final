@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\inverseJoinColumns;
+use Exception;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 
 /**
  * @ORM\Entity
@@ -59,14 +61,19 @@ class Carrito
     /**
     * @param $cliente
     */
-    public function __construct($cliente)
+    public function __construct($cliente, $productos_id)
     {
       $this->id = null;
       $this->cliente = $cliente;
-      $this->productos = new ArrayCollection();
       $this->pagado = false;
       $this->descripcion = '';
       $this->fecha = null;
+      $this->productos = new ArrayCollection();
+
+      foreach ($productos_id as $var) {
+        $producto=EntityManager::getRepository(Producto::class)->find($var);
+        $this->addProducto($producto);
+      }
     }
 
     public function getId(){return $this->id;}
@@ -88,5 +95,36 @@ class Carrito
 
     public function setPagado($data){
       $this->pagado = $data;
+    }
+
+    public function getSumaTotal(){
+      $total=0;
+      foreach ($this->getProductos() as $var) {
+        $total+=$var->getPrecio();
+      }
+      return $total;
+    }
+
+    public function pagarCarrito(){
+      $total=$this->getSumaTotal();
+      $descripcion='
+        Operacion Nro: '.$this->getId().' <br>
+        Cliente: '.$this->getCliente()->getNombre().' '.$this->getCliente()->getApellido().',
+        Email: '.$this->getCliente()->getEmail().'<br>
+        Total de la compra: $ '.number_format($total, 2, ',', '.').'
+        <br><br>
+        Listado de productos
+        <br>
+      ';
+      
+      foreach ($this->getProductos() as $var) {
+        $descripcion.=$var->getId().' '.
+        $var->getDescripcion().' - $'.
+        number_format($var->getPrecio(), 2, ',', '.').'<br>';
+      }
+
+      $this->setPagado(1);
+      $this->setFecha(date('Y-m-d h:i:s'));
+      $this->setDescripcion($descripcion);
     }
 }

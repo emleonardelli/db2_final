@@ -25,8 +25,7 @@ class ProductoDoctrine implements ProductoService {
 
   public function modificarCategoria($categoria_id, $nombre, $descripcion){
     $categoria=EntityManager::getRepository(Categoria::class)->find($categoria_id);
-    $categoria->setNombre($nombre);
-    $categoria->setDescripcion($descripcion);
+    $categoria->actualizarDatos($nombre, $descripcion);
     EntityManager::persist($categoria);
     EntityManager::flush();
   }
@@ -40,8 +39,6 @@ class ProductoDoctrine implements ProductoService {
         throw new Exception('La categoria seleccionada tiene productos asignados, no puede ser eliminada!');
     }
   }
-
-
 
   public function listarMarcas(){
     return EntityManager::getRepository(Marca::class)->findAll();
@@ -59,8 +56,7 @@ class ProductoDoctrine implements ProductoService {
 
   public function modificarMarca($marca_id, $nombre, $descripcion){
     $marca=EntityManager::getRepository(Marca::class)->find($marca_id);
-    $marca->setNombre($nombre);
-    $marca->setDescripcion($descripcion);
+    $marca->actualizarDatos($nombre, $descripcion);
     EntityManager::persist($marca);
     EntityManager::flush();
   }
@@ -71,11 +67,9 @@ class ProductoDoctrine implements ProductoService {
       EntityManager::remove($marca);
       EntityManager::flush();
     } catch (Exception $e) {
-        throw new Exception('La marca seleccionada tiene productos asignados, no puede ser eliminada!');
+      throw new Exception('La marca seleccionada tiene productos asignados, no puede ser eliminada!');
     }
   }
-
-
 
   public function listarProductos(){
     return EntityManager::getRepository(Producto::class)->findAll();
@@ -93,10 +87,7 @@ class ProductoDoctrine implements ProductoService {
 
   public function modificarProducto($producto_id, $descripcion, $precio, $categoria, $marca){
     $producto=EntityManager::getRepository(Producto::class)->find($producto_id);
-    $producto->setDescripcion($descripcion);
-    $producto->setPrecio($precio);
-    $producto->setCategoria($categoria);
-    $producto->setMarca($marca);
+    $producto->actualizarDatos($descripcion, $precio, $categoria, $marca);
     EntityManager::persist($producto);
     EntityManager::flush();
   }

@@ -70,4 +70,11 @@ class Producto
     public function setPrecio($data)        {$this->precio = $data;}
     public function setCategoria($data)     {$this->categoria = $data;}
     public function setMarca($data)         {$this->marca = $data;}
+
+    public function actualizarDatos($descripcion, $precio, $categoria, $marca){
+      $this->descripcion = $descripcion;
+      $this->precio = $precio;
+      $this->categoria = $categoria;
+      $this->marca = $marca;
+    }
 }

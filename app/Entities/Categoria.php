@@ -66,7 +66,10 @@ class Categoria
         $this->productos->remove($producto);
       }
     }
-
+    public function actualizarDatos($nombre, $descripcion){
+      $this->nombre=$nombre;
+      $this->descripcion = $descripcion;
+    }
         
 }
 

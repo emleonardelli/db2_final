@@ -67,6 +67,10 @@ class Marca
       }
     }
 
+    public function actualizarDatos($nombre, $descripcion){
+      $this->nombre=$nombre;
+      $this->descripcion = $descripcion;
+    }
         
 }
 

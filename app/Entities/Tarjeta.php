@@ -4,6 +4,7 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Exception;
 
 /**
  * @ORM\Entity
@@ -66,4 +67,21 @@ class Tarjeta
     public function setNumero($data)     {$this->numero = $data;}
     public function setDisponible($data) {$this->disponible = $data;}
     public function setCliente($data)    {$this->cliente = $data;}
+
+    public function actualizarDatos($nombre, $numero, $disponible){
+      $this->nombre = $nombre;
+      $this->numero = $numero;
+      $this->disponible = $disponible;
+    }
+
+    public function aceptaMonto($monto){
+      if ($monto > $this->getDisponible()){
+        throw new Exception('Limite superado');
+      }
+      return true;
+    }
+
+    public function restarMonto($monto){
+      $this->disponible-=$monto;
+    }
 }

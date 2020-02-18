@@ -64,4 +64,11 @@ class Cliente
     public function setApellido($data) {$this->apellido = $data;}
     public function setDni($data)      {$this->dni = $data;}
     public function setEmail($data)    {$this->email = $data;}
+
+    public function actualizarDatos($nombre, $apellido, $dni, $email){
+      $this->nombre = $nombre;
+      $this->apellido = $apellido;
+      $this->dni = $dni;
+      $this->email = $email;
+    }
 }

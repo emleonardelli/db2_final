@@ -24,10 +24,7 @@ class ClienteDoctrine implements ClienteService {
   public function modificarCliente($cliente_id, $nombre, $apellido, $dni, $email){
     try {
       $cliente=EntityManager::getRepository(Cliente::class)->find($cliente_id);
-      $cliente->setNombre($nombre);
-      $cliente->setApellido($apellido);
-      $cliente->setDni($dni);
-      $cliente->setEmail($email);
+      $cliente->actualizarDatos($nombre, $apellido, $dni, $email);
       EntityManager::persist($cliente);
       EntityManager::flush();
     } catch(Exception $e) {
@@ -76,9 +73,7 @@ class ClienteDoctrine implements ClienteService {
   }
   public function modificarTarjeta($tarjeta_id, $nombre, $numero, $disponible){
     $tarjeta=EntityManager::getRepository(Tarjeta::class)->find($tarjeta_id);
-    $tarjeta->setNombre($nombre);
-    $tarjeta->setNumero($numero);
-    $tarjeta->setDisponible($disponible);
+    $tarjeta->actualizarDatos($nombre, $numero, $disponible);
     EntityManager::persist($tarjeta);
     EntityManager::flush();
     return true;
