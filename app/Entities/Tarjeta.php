@@ -63,10 +63,10 @@ class Tarjeta
     public function getDisponible() {return $this->disponible;}
     public function getCliente()    {return $this->cliente;}
 
-    public function setNombre($data)     {$this->nombre = $data;}
-    public function setNumero($data)     {$this->numero = $data;}
-    public function setDisponible($data) {$this->disponible = $data;}
-    public function setCliente($data)    {$this->cliente = $data;}
+    private function setNombre($data)     {$this->nombre = $data;}
+    private function setNumero($data)     {$this->numero = $data;}
+    private function setDisponible($data) {$this->disponible = $data;}
+    private function setCliente($data)    {$this->cliente = $data;}
 
     public function actualizarDatos($nombre, $numero, $disponible){
       $this->nombre = $nombre;
@@ -74,14 +74,11 @@ class Tarjeta
       $this->disponible = $disponible;
     }
 
-    public function aceptaMonto($monto){
+    public function debitarMonto($monto){
       if ($monto > $this->getDisponible()){
         throw new Exception('Limite superado');
       }
-      return true;
-    }
-
-    public function restarMonto($monto){
       $this->disponible-=$monto;
+      return true;
     }
 }

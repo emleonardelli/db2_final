@@ -60,10 +60,10 @@ class Cliente
     public function getDni(){return $this->dni;}
     public function getEmail(){return $this->email;}
 
-    public function setNombre($data)   {$this->nombre = $data;}
-    public function setApellido($data) {$this->apellido = $data;}
-    public function setDni($data)      {$this->dni = $data;}
-    public function setEmail($data)    {$this->email = $data;}
+    private function setNombre($data)   {$this->nombre = $data;}
+    private function setApellido($data) {$this->apellido = $data;}
+    private function setDni($data)      {$this->dni = $data;}
+    private function setEmail($data)    {$this->email = $data;}
 
     public function actualizarDatos($nombre, $apellido, $dni, $email){
       $this->nombre = $nombre;

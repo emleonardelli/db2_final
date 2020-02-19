@@ -53,8 +53,8 @@ class Categoria
     public function getDescripcion()  {return $this->descripcion;}
     public function getProductos()     {return $this->productos;}  
 
-    public function setNombre($data)      {$this->nombre = $data;}
-    public function setDescripcion($data) {$this->descripcion = $data;}
+    private function setNombre($data)      {$this->nombre = $data;}
+    private function setDescripcion($data) {$this->descripcion = $data;}
     public function addProducto(Producto $producto){
       if(!$this->productos->contains($producto)) {
         $producto->setCategoria($this);

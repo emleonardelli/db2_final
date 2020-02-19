@@ -28,15 +28,12 @@ class VentaDoctrine implements VentaService {
     EntityManager::flush();
   }
 
-  public function pagarCarrito($carrito, $tarjeta){
-    $total=$carrito->getSumaTotal();
+  public function pagarCarrito($carrito, $tarjeta){    
     try {
-      $tarjeta->aceptaMonto($total);
+      $carrito->confirmarCompra($tarjeta);
     } catch (Exception $e) {
       throw new Exception($e->getMessage());
     }
-    $tarjeta->restarMonto($total);
-    $carrito->pagarCarrito();
     EntityManager::persist($carrito);
     EntityManager::persist($tarjeta);
     EntityManager::flush();

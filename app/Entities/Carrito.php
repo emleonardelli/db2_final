@@ -84,20 +84,20 @@ class Carrito
     public function getDescripcion()   {return $this->descripcion;}
     public function getFecha()   {return $this->fecha;}
     
-    public function setFecha($data)   {$this->fecha = $data;}
-    public function setCliente($data)     {$this->cliente = $data;}
-    public function setDescripcion($data)     {$this->descripcion = $data;}
+    private function setFecha($data)   {$this->fecha = $data;}
+    private function setCliente($data)     {$this->cliente = $data;}
+    private function setDescripcion($data)     {$this->descripcion = $data;}
     public function addProducto($producto) {
       if(!$this->productos->contains($producto)) {
         $this->productos->add($producto);
       }
     }
 
-    public function setPagado($data){
+    private function setPagado($data){
       $this->pagado = $data;
     }
 
-    public function getSumaTotal(){
+    private function getSumaTotal(){
       $total=0;
       foreach ($this->getProductos() as $var) {
         $total+=$var->getPrecio();
@@ -105,7 +105,7 @@ class Carrito
       return $total;
     }
 
-    public function pagarCarrito(){
+    private function pagarCarrito(){
       $total=$this->getSumaTotal();
       $descripcion='
         Operacion Nro: '.$this->getId().' <br>
@@ -126,5 +126,15 @@ class Carrito
       $this->setPagado(1);
       $this->setFecha(date('Y-m-d h:i:s'));
       $this->setDescripcion($descripcion);
+    }
+
+    public function confirmarCompra($tarjeta){
+      $total=$this->getSumaTotal();
+      try {
+        $tarjeta->debitarMonto($total);
+      } catch (Exception $e) {
+        throw new Exception($e->getMessage());
+      }
+      $this->pagarCarrito();
     }
 }

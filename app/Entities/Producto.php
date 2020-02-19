@@ -66,10 +66,10 @@ class Producto
     public function getCategoria()   {return $this->categoria;}
     public function getMarca()       {return $this->marca;}
 
-    public function setDescripcion($data)   {$this->descripcion = $data;}
-    public function setPrecio($data)        {$this->precio = $data;}
-    public function setCategoria($data)     {$this->categoria = $data;}
-    public function setMarca($data)         {$this->marca = $data;}
+    private function setDescripcion($data)   {$this->descripcion = $data;}
+    private function setPrecio($data)        {$this->precio = $data;}
+    private function setCategoria($data)     {$this->categoria = $data;}
+    private function setMarca($data)         {$this->marca = $data;}
 
     public function actualizarDatos($descripcion, $precio, $categoria, $marca){
       $this->descripcion = $descripcion;
