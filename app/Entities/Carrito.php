@@ -61,7 +61,7 @@ class Carrito
     /**
     * @param $cliente
     */
-    public function __construct($cliente, $productos_id)
+    public function __construct($cliente, $productos)
     {
       $this->id = null;
       $this->cliente = $cliente;
@@ -70,8 +70,7 @@ class Carrito
       $this->fecha = null;
       $this->productos = new ArrayCollection();
 
-      foreach ($productos_id as $var) {
-        $producto=EntityManager::getRepository(Producto::class)->find($var);
+      foreach ($productos as $producto) {
         $this->addProducto($producto);
       }
     }

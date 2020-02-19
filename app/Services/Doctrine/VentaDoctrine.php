@@ -3,6 +3,7 @@ namespace App\Services\Doctrine;
 
 use App\Api\VentaService;
 use App\Entities\Carrito;
+use App\Entities\Producto;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Exception;
 
@@ -16,7 +17,11 @@ class VentaDoctrine implements VentaService {
   }
 
   public function guardarCarrito($cliente, $productos_id){
-    $carrito=new Carrito($cliente, $productos_id);
+    $productos=[];
+    foreach($productos_id as $var){
+      array_push($productos, EntityManager::getRepository(Producto::class)->find($var));
+    }
+    $carrito=new Carrito($cliente, $productos);
     EntityManager::persist($carrito);
     EntityManager::flush();
     return true;
